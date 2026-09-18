@@ -138,25 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div style="margin-top: 20px; text-align: center; font-size: 13px; color: var(--text-muted);">
         Don't have an artist account? <a href="signup" style="color: var(--color-primary); font-weight: 600;">Sign Up Free</a>
     </div>
-
-    <div class="demo-credentials">
-        <div style="font-weight: 600; color: #fff; margin-bottom: 4px;"><i class="fa-solid fa-bolt" style="color: #fbbf24;"></i> Instant Quick Login (Click to Fill):</div>
-        <div class="demo-btn-group">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="fillCreds('admin@nexustune.com', 'admin123')">
-                <i class="fa-solid fa-shield"></i> Demo Admin
-            </button>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="fillCreds('artist@nexustune.com', 'artist123')">
-                <i class="fa-solid fa-music"></i> Demo Artist
-            </button>
-        </div>
-    </div>
 </div>
 
-<script>
-function fillCreds(email, pass) {
-    document.getElementById('loginEmail').value = email;
-    document.getElementById('loginPass').value = pass;
-}
-</script>
 </body>
 </html>

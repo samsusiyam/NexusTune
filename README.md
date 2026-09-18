@@ -42,21 +42,24 @@ Nexus Tune is a next-generation, high-performance music distribution platform em
 
 ---
 
-## 🚀 Quick Start / Deployment
+## 🚀 Quick Start & Deployment
 
 1. **Clone the repository**:
-   \\ash
+   `ash
    git clone https://github.com/samsusiyam/NexusTune.git
    cd NexusTune
-   \
+   `
+
 2. **Web Server Setup (Apache / XAMPP / Nginx / cPanel)**:
    - Point your virtual host document root to the project folder.
    - Ensure PHP has the following extensions enabled:
      - \pdo_sqlite     - \openssl     - \curl\ / \sockets     - \ileinfo     - \gd\ (for image upload validation)
    - Ensure write permissions on \portal.nexustune.com/data/\ and \portal.nexustune.com/uploads/\.
 
-3. **Default Super Admin Credentials**:
-   - **Email**: \dmin@nexustune.com   - **Password**: \Admin123!
+3. **Super Admin Setup**:
+   - Initial credentials are initialized upon first boot.
+   - Please update the Super Admin password immediately upon deployment via **Account Settings**.
+
 ---
 
 ## 📄 License & Attribution
