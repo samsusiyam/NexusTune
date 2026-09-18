@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $new_status = trim($_POST['status'] ?? 'in_progress');
 
                 if (!empty($reply_msg)) {
-                    $stmt = $pdo->prepare("INSERT INTO ticket_messages (ticket_id, user_id, message) VALUES (?, ?, ?)");
+                    $stmt = $pdo->prepare("INSERT INTO ticket_messages (ticket_id, user_id, message, is_staff) VALUES (?, ?, ?, 1)");
                     $stmt->execute([$ticket_id, $user['id'], $reply_msg]);
 
                     // Update ticket status
@@ -353,22 +353,25 @@ require_once __DIR__ . '/includes/sidebar.php';
 
                     <!-- Scrollable Messages Container -->
                     <div style="flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 18px; max-height: 400px; background: #080b11;">
-                        <?php foreach ($active_messages as $msg): ?>
-                            <?php $isAdmin = ($msg['sender_role'] === 'admin'); ?>
-                            <div style="display: flex; flex-direction: column; align-items: <?= $isAdmin ? 'flex-end' : 'flex-start' ?>;">
+                        <?php foreach ($active_messages as $idx => $msg): ?>
+                            <?php 
+                            // A message is a staff reply if explicitly marked is_staff=1 OR sent by another admin user
+                            $isStaff = (!empty($msg['is_staff']) || ($idx > 0 && $msg['sender_role'] === 'admin' && intval($msg['user_id']) !== intval($active_ticket['user_id'])));
+                            ?>
+                            <div style="display: flex; flex-direction: column; align-items: <?= $isStaff ? 'flex-end' : 'flex-start' ?>;">
                                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 11.5px; color: var(--text-muted);">
-                                    <?php if ($isAdmin): ?>
+                                    <?php if ($isStaff): ?>
                                         <span style="background: rgba(87, 255, 82, 0.15); color: #57ff52; padding: 2px 8px; border-radius: 999px; font-weight: 700; border: 1px solid rgba(87, 255, 82, 0.3);">
                                             <i class="fa-solid fa-shield-halved"></i> Nexus Support Staff (<?= htmlspecialchars($msg['sender_name']) ?>)
                                         </span>
                                     <?php else: ?>
                                         <span style="font-weight: 700; color: #fff;">
-                                            <i class="fa-solid fa-user"></i> <?= htmlspecialchars($msg['sender_name']) ?> (Artist)
+                                            <i class="fa-solid fa-user"></i> <?= htmlspecialchars($msg['sender_name'] ?: $active_ticket['user_name']) ?> (Artist / Client)
                                         </span>
                                     <?php endif; ?>
                                     <span><?= htmlspecialchars($msg['created_at']) ?></span>
                                 </div>
-                                <div style="max-width: 85%; padding: 14px 18px; border-radius: 14px; font-size: 14px; line-height: 1.6; word-break: break-word; <?= $isAdmin ? 'background: #0f1624; border: 1px solid rgba(87, 255, 82, 0.3); color: #ffffff;' : 'background: #141a26; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb;' ?>">
+                                <div style="max-width: 85%; padding: 14px 18px; border-radius: 14px; font-size: 14px; line-height: 1.6; word-break: break-word; <?= $isStaff ? 'background: #0f1624; border: 1px solid rgba(87, 255, 82, 0.3); color: #ffffff;' : 'background: #141a26; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb;' ?>">
                                     <?= nl2br(htmlspecialchars($msg['message'])) ?>
                                 </div>
                             </div>

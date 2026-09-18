@@ -88,6 +88,7 @@ try {
             ticket_id INTEGER NOT NULL,
             user_id INTEGER NOT NULL,
             message TEXT NOT NULL,
+            is_staff INTEGER DEFAULT 0,
             created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (ticket_id) REFERENCES tickets(id) ON DELETE CASCADE,
             FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
@@ -126,6 +127,12 @@ try {
     }
     if (!in_array('verification_expires', $cols)) {
         $pdo->exec("ALTER TABLE users ADD COLUMN verification_expires DATETIME DEFAULT NULL");
+    }
+
+    // Auto-migrate ticket_messages columns for is_staff
+    $tm_cols = $pdo->query("PRAGMA table_info(ticket_messages)")->fetchAll(PDO::FETCH_COLUMN, 1);
+    if (!in_array('is_staff', $tm_cols)) {
+        $pdo->exec("ALTER TABLE ticket_messages ADD COLUMN is_staff INTEGER DEFAULT 0");
     }
 
     // Default settings

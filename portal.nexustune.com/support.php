@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['new_ticket'])) {
             $stmt->execute([$user['id'], $subject, $category, $priority]);
             $ticket_id = $pdo->lastInsertId();
 
-            $msg_stmt = $pdo->prepare("INSERT INTO ticket_messages (ticket_id, user_id, message) VALUES (?, ?, ?)");
+            $msg_stmt = $pdo->prepare("INSERT INTO ticket_messages (ticket_id, user_id, message, is_staff) VALUES (?, ?, ?, 0)");
             $msg_stmt->execute([$ticket_id, $user['id'], $message]);
 
             $success = 'Support ticket #' . $ticket_id . ' created successfully. An agent will respond shortly.';
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['user_reply'])) {
             $t_row = $chk->fetch();
 
             if ($t_row) {
-                $stmt = $pdo->prepare("INSERT INTO ticket_messages (ticket_id, user_id, message) VALUES (?, ?, ?)");
+                $stmt = $pdo->prepare("INSERT INTO ticket_messages (ticket_id, user_id, message, is_staff) VALUES (?, ?, ?, 0)");
                 $stmt->execute([$ticket_id, $user['id'], $reply_msg]);
 
                 // Re-open if resolved
@@ -245,22 +245,25 @@ require_once __DIR__ . '/includes/sidebar.php';
 
                     <!-- Conversation Thread -->
                     <div style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; max-height: 420px; background: #080b11;">
-                        <?php foreach ($active_messages as $msg): ?>
-                            <?php $isAdmin = ($msg['sender_role'] === 'admin'); ?>
-                            <div style="display: flex; flex-direction: column; align-items: <?= $isAdmin ? 'flex-start' : 'flex-end' ?>;">
+                        <?php foreach ($active_messages as $idx => $msg): ?>
+                            <?php 
+                            // A message is a staff reply if marked is_staff=1 OR created by an admin who is not the ticket owner
+                            $isStaff = (!empty($msg['is_staff']) || ($idx > 0 && $msg['sender_role'] === 'admin' && intval($msg['user_id']) !== intval($active_ticket['user_id'])));
+                            ?>
+                            <div style="display: flex; flex-direction: column; align-items: <?= $isStaff ? 'flex-start' : 'flex-end' ?>;">
                                 <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 4px; font-size: 11px; color: var(--text-muted);">
-                                    <?php if ($isAdmin): ?>
+                                    <?php if ($isStaff): ?>
                                         <span style="background: rgba(87, 255, 82, 0.15); color: #57ff52; padding: 2px 8px; border-radius: 999px; font-weight: 700; border: 1px solid rgba(87, 255, 82, 0.3);">
                                             <i class="fa-solid fa-shield-halved"></i> Nexus Support Staff
                                         </span>
                                     <?php else: ?>
                                         <span style="font-weight: 700; color: #fff;">
-                                            <i class="fa-solid fa-user"></i> You (<?= htmlspecialchars($msg['sender_name']) ?>)
+                                            <i class="fa-solid fa-user"></i> <?= htmlspecialchars($msg['sender_name'] ?: $user['name']) ?>
                                         </span>
                                     <?php endif; ?>
                                     <span><?= htmlspecialchars($msg['created_at']) ?></span>
                                 </div>
-                                <div style="max-width: 85%; padding: 13px 16px; border-radius: 12px; font-size: 13.5px; line-height: 1.6; word-break: break-word; <?= $isAdmin ? 'background: #0f1624; border: 1px solid rgba(87, 255, 82, 0.35); color: #ffffff;' : 'background: #141a26; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb;' ?>">
+                                <div style="max-width: 85%; padding: 13px 16px; border-radius: 12px; font-size: 13.5px; line-height: 1.6; word-break: break-word; <?= $isStaff ? 'background: #0f1624; border: 1px solid rgba(87, 255, 82, 0.35); color: #ffffff;' : 'background: #141a26; border: 1px solid rgba(255, 255, 255, 0.08); color: #e5e7eb;' ?>">
                                     <?= nl2br(htmlspecialchars($msg['message'])) ?>
                                 </div>
                             </div>
