@@ -23750,14 +23750,42 @@
         }
       }
 
-      document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.framer-9tr6sm, a[href*="openLabelInviteModal"], .label-invite-trigger');
-        if (btn) {
+      // Global Click & Touch Delegation for Mobile & Desktop
+      function handleAppInteractions(e) {
+        // 1. Label Plan Modal Trigger
+        const labelBtn = e.target.closest('.framer-9tr6sm, a[href*="openLabelInviteModal"], .label-invite-trigger');
+        if (labelBtn) {
           e.preventDefault();
           e.stopPropagation();
           openLabelInviteModal(e);
+          return;
         }
-      }, true);
+
+        // 2. Hero & Mobile "Get Started" Buttons
+        const getStartedBtn = e.target.closest('.framer-16w1hav, [data-framer-name="Button"], [data-framer-name="Row/Buttons"] a');
+        if (getStartedBtn) {
+          const text = (getStartedBtn.innerText || getStartedBtn.textContent || '').trim();
+          if (text.includes('Get Started')) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = 'https://portal.nexustune.com/signup';
+            return;
+          }
+        }
+      }
+
+      document.addEventListener('click', handleAppInteractions, true);
+      document.addEventListener('touchend', function(e) {
+        const getStartedBtn = e.target.closest('.framer-16w1hav, [data-framer-name="Button"], [data-framer-name="Row/Buttons"] a');
+        if (getStartedBtn) {
+          const text = (getStartedBtn.innerText || getStartedBtn.textContent || '').trim();
+          if (text.includes('Get Started')) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.location.href = 'https://portal.nexustune.com/signup';
+          }
+        }
+      }, { passive: false });
 
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
