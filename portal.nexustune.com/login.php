@@ -34,7 +34,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($user['status'] === 'suspended') {
                     $error = 'Your account has been suspended. Please contact support.';
                 } elseif ($user['role'] !== 'admin' && intval($user['email_verified'] ?? 0) === 0) {
-                    $error = '<strong>Email Verification Required:</strong> Your artist account has not been activated yet. Please verify your email or <a href="verify-email?resend=1&email=' . urlencode($user['email']) . '" style="color: var(--color-primary); font-weight: 700; text-decoration: underline;">click here to resend verification link</a>.';
+                    require_once __DIR__ . '/includes/mailer.php';
+                    $code = sprintf("%06d", mt_rand(100000, 999999));
+                    $expires = date('Y-m-d H:i:s', time() + 900); // 15 minutes
+
+                    $upd = $pdo->prepare("UPDATE users SET verification_token = ?, verification_expires = ? WHERE id = ?");
+                    $upd->execute([$code, $expires, $user['id']]);
+
+                    sendSignupOtpEmail($user['email'], $user['name'], $code);
+
+                    $_SESSION['pending_verify_email'] = $user['email'];
+                    header('Location: verify-email?email=' . urlencode($user['email']) . '&msg=pending');
+                    exit;
                 } else {
                     regenerateUserSession();
                     $_SESSION['user_id'] = $user['id'];

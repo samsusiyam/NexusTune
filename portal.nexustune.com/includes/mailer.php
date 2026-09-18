@@ -430,31 +430,39 @@ HTML;
 }
 
 /**
- * Send Signup Email Verification
+ * Send Signup 6-Digit OTP Email Verification
  */
-function sendSignupVerificationEmail($to_email, $name, $token) {
-    $verify_url = "https://portal.nexustune.com/verify-email?token=" . urlencode($token);
-    $subject = "Verify Your Nexus Tune Artist Account";
-    $preheader = "Activate your Nexus Tune artist portal and begin distributing music globally.";
+function sendSignupOtpEmail($to_email, $name, $code) {
+    $subject = "Your Nexus Tune Verification Code: $code";
+    $preheader = "Your 6-digit activation code is $code. Enter this code to verify your artist account.";
 
     $content = <<<HTML
     <h2 style="color: #ffffff; margin-top: 0; font-size: 22px; font-weight: 700;">Welcome to Nexus Tune, {$name}! 🎵</h2>
-    <p>Thank you for joining <strong>Nexus Tune</strong>, the global music distribution platform empowering over 50,000+ independent artists and record labels worldwide.</p>
-    <p>To activate your artist portal, start uploading releases to Spotify & Apple Music, and receive 100% of your streaming royalties, please verify your email address:</p>
+    <p>Thank you for creating your artist account with <strong>Nexus Tune Global Distribution</strong>.</p>
+    <p>To verify your email address and activate your artist workspace, please enter the following 6-digit verification code on the verification screen:</p>
     
-    <div style="text-align: center; margin: 30px 0;">
-        <a href="{$verify_url}" class="btn-primary" target="_blank">Verify Email Address & Activate Portal &rarr;</a>
+    <div style="text-align: center; margin: 28px 0;">
+        <div style="display: inline-block; background: rgba(87, 255, 82, 0.08); border: 2px solid #57ff52; border-radius: 16px; padding: 18px 36px; box-shadow: 0 0 30px rgba(87, 255, 82, 0.25);">
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #57ff52; margin-bottom: 6px; font-weight: 700;">6-Digit Activation Code</div>
+            <div style="font-family: 'SFMono-Regular', Consolas, Monaco, monospace; font-size: 36px; font-weight: 800; letter-spacing: 12px; color: #ffffff;">{$code}</div>
+        </div>
     </div>
 
-    <p style="font-size: 13px; color: #9ca3af;">Or copy and paste this verification link directly into your browser:</p>
-    <div class="code-box">{$verify_url}</div>
-
-    <p style="font-size: 12px; color: #6b7280; margin-top: 24px;">Note: This verification link is valid for 24 hours. If you did not create an account with Nexus Tune, no further action is required.</p>
+    <p style="font-size: 13.5px; color: #9ca3af; text-align: center; line-height: 1.5;">
+        This code is valid for <strong>15 minutes</strong>. If you did not request this verification, please ignore this message.
+    </p>
 HTML;
 
     $html = renderNexusEmail($subject, $preheader, $content);
     $mailer = new NexusMailer();
-    return $mailer->send($to_email, $name, $subject, $html, "Please verify your Nexus Tune account by visiting: $verify_url");
+    return $mailer->send($to_email, $name, $subject, $html, "Your Nexus Tune Verification Code is: $code (Valid for 15 minutes)");
+}
+
+/**
+ * Send Signup Email Verification Link (Legacy Fallback)
+ */
+function sendSignupVerificationEmail($to_email, $name, $token) {
+    return sendSignupOtpEmail($to_email, $name, $token);
 }
 
 /**
@@ -485,3 +493,4 @@ HTML;
     $mailer = new NexusMailer();
     return $mailer->send($to_email, $name, $subject, $html, "Reset your password at: $reset_url");
 }
+

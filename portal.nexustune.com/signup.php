@@ -31,24 +31,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif (strlen($password) < 6) {
             $error = 'Password must be at least 6 characters long.';
         } else {
-            $check = $pdo->prepare("SELECT id FROM users WHERE email = ?");
+            $check = $pdo->prepare("SELECT id, email_verified FROM users WHERE email = ?");
             $check->execute([$email]);
-            if ($check->fetch()) {
-                $error = 'An account with this email already exists.';
+            $existing_user = $check->fetch();
+
+            if ($existing_user && intval($existing_user['email_verified']) === 1) {
+                $error = 'An account with this email already exists. Please <a href="login" style="color: var(--color-primary); font-weight: 700; text-decoration: underline;">sign in here</a>.';
             } else {
                 $hash = password_hash($password, PASSWORD_DEFAULT);
-                $token = bin2hex(random_bytes(32));
-                $expires = date('Y-m-d H:i:s', time() + 86400); // 24 hours
+                $code = sprintf("%06d", mt_rand(100000, 999999));
+                $expires = date('Y-m-d H:i:s', time() + 900); // 15 minutes
 
-                $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role, account_type, country, email_verified, verification_token, verification_expires) VALUES (?, ?, ?, 'artist', ?, ?, 0, ?, ?)");
-                $stmt->execute([$name, $email, $hash, $account_type, $country, $token, $expires]);
-                $user_id = $pdo->lastInsertId();
+                if ($existing_user) {
+                    // Update existing unverified account
+                    $stmt = $pdo->prepare("UPDATE users SET name = ?, password = ?, account_type = ?, country = ?, verification_token = ?, verification_expires = ? WHERE id = ?");
+                    $stmt->execute([$name, $hash, $account_type, $country, $code, $expires, $existing_user['id']]);
+                } else {
+                    // Insert new unverified account
+                    $stmt = $pdo->prepare("INSERT INTO users (name, email, password, role, account_type, country, email_verified, verification_token, verification_expires) VALUES (?, ?, ?, 'artist', ?, ?, 0, ?, ?)");
+                    $stmt->execute([$name, $email, $hash, $account_type, $country, $code, $expires]);
+                }
 
-                // Dispatch verification email
-                $mail_sent = sendSignupVerificationEmail($email, $name, $token);
+                // Dispatch 6-Digit OTP email
+                sendSignupOtpEmail($email, $name, $code);
 
-                $registered_email = $email;
-                $success = "Account created successfully! We've sent an activation link to <strong>" . htmlspecialchars($email) . "</strong>. Please verify your email to access your account.";
+                $_SESSION['pending_verify_email'] = $email;
+                header('Location: verify-email?email=' . urlencode($email) . '&sent=1');
+                exit;
             }
         }
     }
