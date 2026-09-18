@@ -23750,6 +23750,15 @@
         }
       }
 
+      document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.framer-9tr6sm, a[href*="openLabelInviteModal"], .label-invite-trigger');
+        if (btn) {
+          e.preventDefault();
+          e.stopPropagation();
+          openLabelInviteModal(e);
+        }
+      }, true);
+
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
           closeLabelInviteModal();
