@@ -13877,9 +13877,7 @@
                         --framer-text-color: rgba(255, 255, 255, 0.7);
                       "
                       class="framer-text"
-                    >
-                      $29.99/one-time
-                    </p>
+                    >Free</p>
                   </div>
                 </div>
                 <div class="framer-27pt8f">
@@ -14460,7 +14458,7 @@
                 </div>
                 <!--$--><a
                   class="framer-1jf7uq7 framer-axt5p6"
-                  href="https://portal.nexustune.com/login"
+                  href="https://portal.nexustune.com/signup"
                   ><div
                     class="framer-lo8o7z"
                     data-framer-component-type="RichTextContainer"
@@ -14528,9 +14526,7 @@
                         --framer-text-color: rgba(255, 255, 255, 0.7);
                       "
                       class="framer-text"
-                    >
-                      $59.99/one-time
-                    </p>
+                    >Invite only</p>
                   </div>
                 </div>
                 <div class="framer-1irxy2e">
@@ -15111,8 +15107,7 @@
                   </div>
                 </div>
                 <!--$--><a
-                  class="framer-9tr6sm framer-axt5p6"
-                  href="https://portal.nexustune.com/login"
+                  class="framer-9tr6sm framer-axt5p6" href="javascript:void(0)" onclick="openLabelInviteModal(event)"
                   ><div
                     class="framer-1dx31yt"
                     data-framer-component-type="RichTextContainer"
@@ -23635,5 +23630,132 @@
     </script>
 
     <!-- End of bodyEnd -->
+  
+    <!-- Nexus Tune Label Plan Invite Modal -->
+    <style>
+      @keyframes nexusModalPop {
+        from { opacity: 0; transform: scale(0.92) translateY(12px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+      }
+      .nexus-modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 999999;
+        background: rgba(0, 0, 0, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+      .nexus-modal-overlay.active {
+        display: flex !important;
+      }
+    </style>
+
+    <div id="labelInviteModal" class="nexus-modal-overlay" onclick="handleLabelModalOverlayClick(event)">
+      <div class="nexus-modal-box" style="background: linear-gradient(145deg, #0e1422 0%, #06090e 100%); border: 1px solid rgba(87, 255, 82, 0.4); box-shadow: 0 25px 70px rgba(0,0,0,0.9), 0 0 50px rgba(87, 255, 82, 0.18); border-radius: 24px; max-width: 490px; width: 100%; padding: 36px 30px; position: relative; color: #fff; text-align: center; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; animation: nexusModalPop 0.28s cubic-bezier(0.16, 1, 0.3, 1);">
+        
+        <button type="button" onclick="closeLabelInviteModal()" style="position: absolute; top: 16px; right: 18px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 50%; width: 34px; height: 34px; color: #94a3b8; font-size: 20px; line-height: 1; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,0.18)'" onmouseout="this.style.color='#94a3b8';this.style.background='rgba(255,255,255,0.06)'" title="Close Modal">&times;</button>
+        
+        <div style="width: 68px; height: 68px; border-radius: 50%; background: rgba(87, 255, 82, 0.12); border: 2px solid rgba(87, 255, 82, 0.45); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 28px; color: #57ff52; box-shadow: 0 0 30px rgba(87, 255, 82, 0.3);">
+          ✉
+        </div>
+
+        <div style="display: inline-block; background: rgba(87, 255, 82, 0.15); border: 1px solid rgba(87, 255, 82, 0.4); color: #57ff52; font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; padding: 4px 14px; border-radius: 9999px; margin-bottom: 12px;">
+          Invite Only Plan
+        </div>
+
+        <h3 style="font-size: 23px; font-weight: 800; color: #ffffff; margin: 0 0 10px 0; letter-spacing: -0.4px;">Nexus Label Plan</h3>
+        
+        <p style="font-size: 14.5px; line-height: 1.6; color: #cbd5e1; margin: 0 0 22px 0;">
+          The <strong style="color: #ffffff;">Label Plan</strong> is strictly available via invitation for established record labels, management agencies, and enterprise music catalogs.
+        </p>
+
+        <!-- Email Contact Box -->
+        <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(87, 255, 82, 0.3); border-radius: 16px; padding: 18px 20px; margin-bottom: 24px; text-align: left;">
+          <div style="font-size: 11.5px; color: #94a3b8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.6px; margin-bottom: 8px;">Direct Partnership & Invitation Email:</div>
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; background: rgba(0,0,0,0.45); padding: 10px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.08);">
+            <a href="mailto:contact@nexustune.com?subject=Nexus%20Tune%20Label%20Plan%20Invite%20Request" style="font-size: 15px; font-weight: 700; color: #57ff52; text-decoration: none; word-break: break-all;" title="Click to open mail client">contact@nexustune.com</a>
+            <button type="button" id="copyEmailBtn" onclick="copyContactEmail()" style="background: #57ff52; color: #000000; border: none; font-size: 12px; font-weight: 700; padding: 7px 14px; border-radius: 8px; cursor: pointer; transition: all 0.2s; white-space: nowrap;">Copy</button>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; gap: 10px; justify-content: center;">
+          <a href="mailto:contact@nexustune.com?subject=Nexus%20Tune%20Label%20Plan%20Invite%20Request" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; background: #57ff52; color: #000000; font-size: 14.5px; font-weight: 700; padding: 13px 20px; border-radius: 9999px; text-decoration: none; box-shadow: 0 0 20px rgba(87, 255, 82, 0.3); transition: transform 0.2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
+            ✉ Send Email
+          </a>
+          <button type="button" onclick="closeLabelInviteModal(); scrollToContactForm();" style="flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #ffffff; font-size: 14.5px; font-weight: 600; padding: 13px 20px; border-radius: 9999px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.16)'" onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+            Contact Form ↓
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <script>
+      function openLabelInviteModal(e) {
+        if (e) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+        const modal = document.getElementById('labelInviteModal');
+        if (modal) {
+          modal.classList.add('active');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+
+      function closeLabelInviteModal() {
+        const modal = document.getElementById('labelInviteModal');
+        if (modal) {
+          modal.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      }
+
+      function handleLabelModalOverlayClick(e) {
+        if (e.target.id === 'labelInviteModal') {
+          closeLabelInviteModal();
+        }
+      }
+
+      function copyContactEmail() {
+        const email = 'contact@nexustune.com';
+        navigator.clipboard.writeText(email).then(() => {
+          const btn = document.getElementById('copyEmailBtn');
+          if (btn) {
+            btn.textContent = 'Copied!';
+            btn.style.background = '#ffffff';
+            setTimeout(() => {
+              btn.textContent = 'Copy';
+              btn.style.background = '#57ff52';
+            }, 2500);
+          }
+          if (typeof showNexusToast === 'function') {
+            showNexusToast('Email Copied', 'contact@nexustune.com copied to clipboard.', false);
+          }
+        }).catch(() => {
+          alert('Email: contact@nexustune.com');
+        });
+      }
+
+      function scrollToContactForm() {
+        const contactSec = document.querySelector('[name="contact"], #contact, section:has(form), form');
+        if (contactSec) {
+          contactSec.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeLabelInviteModal();
+        }
+      });
+    </script>
+
   </body>
 </html>
