@@ -34,6 +34,13 @@ if (isAdmin()) {
     
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Prevent Duplicate Form Resubmission on Page Refresh (PRG) -->
+    <script>
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+    </script>
 </head>
 <body>
 <div class="app-wrapper">

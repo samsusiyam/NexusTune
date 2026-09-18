@@ -39,13 +39,10 @@ class NexusMailer {
     /**
      * Send email via Direct Socket SMTP with TLS/SSL
      */
-    /**
-     * Send email via Direct Socket SMTP with TLS/SSL
-     */
     public function send($to_email, $to_name, $subject, $html_body, $alt_body = '') {
         // If password is not configured or in local offline mode, record to mail log and attempt fallback
         if (empty($this->pass) || !$this->enabled) {
-            $this->logMail($to_email, $subject, $html_body);
+            $this->logMail($to_email, $subject, $html_body, 'Logged/Fallback (No Live SMTP Password)');
             // Also attempt PHP mail() if available
             $headers  = "MIME-Version: 1.0\r\n";
             $headers .= "Content-type: text/html; charset=UTF-8\r\n";
@@ -128,24 +125,35 @@ class NexusMailer {
             $this->cmd($socket, "RCPT TO:<{$to_email}>");
             $this->cmd($socket, "DATA");
 
-            // Build Headers & MIME Data
+            // Auto-generate plain text if empty
+            if (empty($alt_body)) {
+                $alt_body = strip_tags(preg_replace('/<br\s*\/?>/i', "\n", $html_body));
+            }
+
+            // Build RFC 5322 Compliant Headers & MIME Data
             $boundary = "----=_NextPart_" . md5(time() . rand());
+            $msg_domain = preg_replace('/^mail\./', '', $this->host);
+            if (empty($msg_domain) || !strpos($msg_domain, '.')) $msg_domain = 'nexustune.com';
+            $msg_id = time() . '.' . bin2hex(random_bytes(8)) . '@' . $msg_domain;
+
             $headers  = "MIME-Version: 1.0\r\n";
             $headers .= "From: {$this->from_name} <{$this->from_email}>\r\n";
+            $headers .= "Reply-To: {$this->from_email}\r\n";
+            $headers .= "Return-Path: <{$this->from_email}>\r\n";
             $headers .= "To: " . ($to_name ? "{$to_name} <{$to_email}>" : $to_email) . "\r\n";
             $headers .= "Subject: =?UTF-8?B?" . base64_encode($subject) . "?=\r\n";
             $headers .= "Date: " . date("r") . "\r\n";
+            $headers .= "Message-ID: <{$msg_id}>\r\n";
             $headers .= "X-Mailer: NexusTuneMailer/2.0\r\n";
             $headers .= "Content-Type: multipart/alternative; boundary=\"{$boundary}\"\r\n";
             $headers .= "\r\n";
 
             $message  = $headers;
-            if (!empty($alt_body)) {
-                $message .= "--{$boundary}\r\n";
-                $message .= "Content-Type: text/plain; charset=UTF-8\r\n";
-                $message .= "Content-Transfer-Encoding: base64\r\n\r\n";
-                $message .= chunk_split(base64_encode($alt_body)) . "\r\n";
-            }
+            $message .= "--{$boundary}\r\n";
+            $message .= "Content-Type: text/plain; charset=UTF-8\r\n";
+            $message .= "Content-Transfer-Encoding: base64\r\n\r\n";
+            $message .= chunk_split(base64_encode($alt_body)) . "\r\n";
+
             $message .= "--{$boundary}\r\n";
             $message .= "Content-Type: text/html; charset=UTF-8\r\n";
             $message .= "Content-Transfer-Encoding: base64\r\n\r\n";
@@ -159,7 +167,7 @@ class NexusMailer {
             $this->cmd($socket, "QUIT");
             fclose($socket);
 
-            $this->logMail($to_email, $subject, $html_body, "Success (SMTP 250 OK)");
+            $this->logMail($to_email, $subject, $html_body, "Success (SMTP 250 OK - " . trim($send_res) . ")");
             return true;
 
         } catch (Exception $e) {
@@ -170,26 +178,35 @@ class NexusMailer {
 
     /**
      * Diagnostic test routine for Admin SMTP testing with real-time logs
+     * Accepts optional $custom_config to test unsaved settings on-the-fly
      */
-    public function testConnectionAndSend($to_email) {
-        $logs = [];
-        $logs[] = "Initializing test connection to {$this->host}:{$this->port} (Security: {$this->secure})...";
+    public function testConnectionAndSend($to_email, $custom_config = null) {
+        $host       = $custom_config['host'] ?? $this->host;
+        $port       = intval($custom_config['port'] ?? $this->port);
+        $user       = $custom_config['user'] ?? $this->user;
+        $pass       = isset($custom_config['pass']) ? $custom_config['pass'] : $this->pass;
+        $secure     = strtolower($custom_config['secure'] ?? $this->secure);
+        $from_email = $custom_config['from_email'] ?? $this->from_email;
+        $from_name  = $custom_config['from_name'] ?? $this->from_name;
 
-        if (empty($this->pass)) {
+        $logs = [];
+        $logs[] = "Initializing test connection to {$host}:{$port} (Security: {$secure})...";
+
+        if (empty($pass)) {
             $logs[] = "⚠️ Notice: SMTP password is empty. The mailer will operate in local fallback logging mode.";
-            $this->logMail($to_email, "SMTP Test Message", "<p>Test email content</p>", "Test in Fallback mode");
+            $this->logMail($to_email, "SMTP Test Delivery (Simulated)", "<p>Test email in fallback mode</p>", "Simulated Fallback (No Password)");
             return [
                 'success' => true,
                 'fallback' => true,
                 'logs' => $logs,
-                'message' => 'Mailer simulated successfully in local fallback mode. Outgoing mail logged to data/mail_log.txt.'
+                'message' => 'Mailer simulated in local fallback mode. Message recorded in system activity log.'
             ];
         }
 
         try {
             $timeout = 15;
-            $scheme = ($this->secure === 'ssl') ? 'ssl://' : 'tcp://';
-            $remote_addr = $scheme . $this->host . ':' . $this->port;
+            $scheme = ($secure === 'ssl') ? 'ssl://' : 'tcp://';
+            $remote_addr = $scheme . $host . ':' . $port;
 
             $logs[] = "Connecting to socket: $remote_addr...";
             $context = stream_context_create([
@@ -203,6 +220,7 @@ class NexusMailer {
             $socket = @stream_socket_client($remote_addr, $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT, $context);
             if (!$socket) {
                 $logs[] = "❌ Socket Error ($errno): $errstr";
+                $this->logMail($to_email, "SMTP Test Delivery", "", "Socket Failed: $errstr");
                 return ['success' => false, 'logs' => $logs, 'message' => "Socket connection failed: $errstr (Code $errno)"];
             }
             $logs[] = "✅ TCP Socket connected successfully.";
@@ -214,6 +232,7 @@ class NexusMailer {
             if (empty($response) || substr($response, 0, 3) !== '220') {
                 fclose($socket);
                 $logs[] = "❌ Invalid SMTP greeting: $response";
+                $this->logMail($to_email, "SMTP Test Delivery", "", "Invalid Greeting: $response");
                 return ['success' => false, 'logs' => $logs, 'message' => "Invalid SMTP greeting: $response"];
             }
 
@@ -221,7 +240,7 @@ class NexusMailer {
             $logs[] = "-> EHLO " . gethostname();
             $logs[] = "<- " . trim($ehlo_res);
 
-            if ($this->secure === 'tls') {
+            if ($secure === 'tls') {
                 $logs[] = "-> STARTTLS";
                 $tls_res = $this->cmd($socket, "STARTTLS");
                 $logs[] = "<- " . trim($tls_res);
@@ -229,6 +248,7 @@ class NexusMailer {
                 if (substr($tls_res, 0, 3) !== '220') {
                     fclose($socket);
                     $logs[] = "❌ Server rejected STARTTLS with: " . trim($tls_res);
+                    $this->logMail($to_email, "SMTP Test Delivery", "", "STARTTLS rejected: $tls_res");
                     return ['success' => false, 'logs' => $logs, 'message' => "Server rejected STARTTLS: " . trim($tls_res)];
                 }
 
@@ -241,6 +261,7 @@ class NexusMailer {
                 if (!$secure_ok) {
                     fclose($socket);
                     $logs[] = "❌ TLS Handshake failed.";
+                    $this->logMail($to_email, "SMTP Test Delivery", "", "TLS Handshake Failed");
                     return ['success' => false, 'logs' => $logs, 'message' => "TLS Handshake negotiation failed."];
                 }
                 $logs[] = "✅ TLS Encrypted tunnel established.";
@@ -250,23 +271,24 @@ class NexusMailer {
                 $logs[] = "<- " . trim($ehlo_tls);
             }
 
-            if (!empty($this->user) && !empty($this->pass)) {
-                $logs[] = "Authenticating with user: " . $this->user;
+            if (!empty($user) && !empty($pass)) {
+                $logs[] = "Authenticating with user: " . $user;
                 $this->cmd($socket, "AUTH LOGIN");
-                $this->cmd($socket, base64_encode($this->user));
-                $auth_res = $this->cmd($socket, base64_encode($this->pass));
+                $this->cmd($socket, base64_encode($user));
+                $auth_res = $this->cmd($socket, base64_encode($pass));
                 $logs[] = "<- " . trim($auth_res);
 
                 if (substr($auth_res, 0, 3) !== '235') {
                     fclose($socket);
                     $logs[] = "❌ Authentication failed. Response: " . trim($auth_res);
+                    $this->logMail($to_email, "SMTP Test Delivery", "", "Auth Failed: $auth_res");
                     return ['success' => false, 'logs' => $logs, 'message' => "SMTP Authentication failed: " . trim($auth_res)];
                 }
                 $logs[] = "✅ SMTP Authentication successful.";
             }
 
-            $logs[] = "-> MAIL FROM:<{$this->from_email}>";
-            $res = $this->cmd($socket, "MAIL FROM:<{$this->from_email}>");
+            $logs[] = "-> MAIL FROM:<{$from_email}>";
+            $res = $this->cmd($socket, "MAIL FROM:<{$from_email}>");
             $logs[] = "<- " . trim($res);
 
             $logs[] = "-> RCPT TO:<{$to_email}>";
@@ -277,19 +299,40 @@ class NexusMailer {
 
             $subject = "Nexus Tune SMTP Live Test Delivery";
             $time_str = date('Y-m-d H:i:s T');
-            $body = "<p>Congratulations! Your SMTP configuration on <strong>Nexus Tune</strong> is operating perfectly.</p><p>Sent on: <code>{$time_str}</code></p>";
+            $body = "<p>Congratulations! Your SMTP mail server configuration on <strong>Nexus Tune</strong> is operating perfectly.</p><p>Sent from: <code>{$from_email}</code> via <code>{$host}:{$port}</code></p><p>Timestamp: <code>{$time_str}</code></p>";
             $html = renderNexusEmail($subject, "SMTP Test Delivery Success", $body);
+            $plain_text = "Nexus Tune SMTP Live Test Delivery\n\nCongratulations! Your SMTP mail server configuration on Nexus Tune is operating perfectly.\nSent from: {$from_email} via {$host}:{$port}\nTimestamp: {$time_str}\n";
 
             $boundary = "----=_NextPart_" . md5(time() . rand());
+            $msg_domain = preg_replace('/^mail\./', '', $host);
+            if (empty($msg_domain) || !strpos($msg_domain, '.')) $msg_domain = 'nexustune.com';
+            $msg_id = time() . '.' . bin2hex(random_bytes(8)) . '@' . $msg_domain;
+
             $headers  = "MIME-Version: 1.0\r\n";
-            $headers .= "From: {$this->from_name} <{$this->from_email}>\r\n";
+            $headers .= "From: {$from_name} <{$from_email}>\r\n";
+            $headers .= "Reply-To: {$from_email}\r\n";
+            $headers .= "Return-Path: <{$from_email}>\r\n";
             $headers .= "To: {$to_email}\r\n";
             $headers .= "Subject: =?UTF-8?B?" . base64_encode($subject) . "?=\r\n";
             $headers .= "Date: " . date("r") . "\r\n";
+            $headers .= "Message-ID: <{$msg_id}>\r\n";
             $headers .= "X-Mailer: NexusTuneMailer/2.0\r\n";
-            $headers .= "Content-Type: text/html; charset=UTF-8\r\n\r\n";
+            $headers .= "Content-Type: multipart/alternative; boundary=\"{$boundary}\"\r\n";
+            $headers .= "\r\n";
 
-            $message = $headers . $html . "\r\n.\r\n";
+            $message  = $headers;
+            $message .= "--{$boundary}\r\n";
+            $message .= "Content-Type: text/plain; charset=UTF-8\r\n";
+            $message .= "Content-Transfer-Encoding: base64\r\n\r\n";
+            $message .= chunk_split(base64_encode($plain_text)) . "\r\n";
+
+            $message .= "--{$boundary}\r\n";
+            $message .= "Content-Type: text/html; charset=UTF-8\r\n";
+            $message .= "Content-Transfer-Encoding: base64\r\n\r\n";
+            $message .= chunk_split(base64_encode($html)) . "\r\n";
+            $message .= "--{$boundary}--\r\n";
+            $message .= "\r\n.\r\n";
+
             fputs($socket, $message);
             $send_res = $this->readResponse($socket);
             $logs[] = "<- " . trim($send_res);
@@ -298,10 +341,19 @@ class NexusMailer {
             fclose($socket);
 
             $logs[] = "✅ Mail transaction completed (250 OK). Test email sent successfully!";
-            return ['success' => true, 'logs' => $logs, 'message' => "Test email successfully delivered to $to_email via SMTP!"];
+            
+            // Log to system mail log file
+            $this->logMail($to_email, $subject, $html, "Test Success (SMTP 250 OK - " . trim($send_res) . ")");
+
+            return [
+                'success' => true,
+                'logs' => $logs,
+                'message' => "Test email successfully delivered to $to_email via SMTP (ID: " . trim($send_res) . ")! If not visible in Inbox within 1-2 minutes, check your Spam/Junk folder."
+            ];
 
         } catch (Exception $e) {
             $logs[] = "❌ Exception: " . $e->getMessage();
+            $this->logMail($to_email, "SMTP Test Delivery", "", "Exception: " . $e->getMessage());
             return ['success' => false, 'logs' => $logs, 'message' => $e->getMessage()];
         }
     }
