@@ -23593,7 +23593,11 @@
                 }
 
                 try {
-                  const res = await fetch('portal.nexustune.com/api/contact.php', {
+                  const apiUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+                    ? (window.location.pathname.includes('/arhmusic/') ? '/arhmusic/portal.nexustune.com/api/contact.php' : '/portal.nexustune.com/api/contact.php')
+                    : 'https://portal.nexustune.com/api/contact.php';
+
+                  const res = await fetch(apiUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ name, email, message })

@@ -53,6 +53,18 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
         </a>
 
         <?php if (isAdmin()): ?>
+            <?php
+            if (!isset($open_tickets_count)) {
+                try {
+                    $open_tickets_count = $pdo->query("SELECT COUNT(*) FROM tickets WHERE status = 'open'")->fetchColumn();
+                } catch (Exception $e) { $open_tickets_count = 0; }
+            }
+            if (!isset($contacts_count)) {
+                try {
+                    $contacts_count = $pdo->query("SELECT COUNT(*) FROM contacts WHERE status = 'new'")->fetchColumn();
+                } catch (Exception $e) { $contacts_count = 0; }
+            }
+            ?>
             <div class="nav-section-title" style="margin-top: 15px;">Admin Management</div>
             
             <a href="admin" class="nav-item <?= $current_page === 'admin' ? 'active' : '' ?>">
@@ -68,6 +80,14 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
                 <?php endif; ?>
             </a>
 
+            <a href="admin-tickets" class="nav-item <?= $current_page === 'admin-tickets' ? 'active' : '' ?>">
+                <span class="nav-icon"><i class="fa-solid fa-headset"></i></span>
+                <span>Support Tickets</span>
+                <?php if ($open_tickets_count > 0): ?>
+                    <span class="nav-badge danger"><?= $open_tickets_count ?></span>
+                <?php endif; ?>
+            </a>
+
             <a href="admin-users" class="nav-item <?= $current_page === 'admin-users' ? 'active' : '' ?>">
                 <span class="nav-icon"><i class="fa-solid fa-users"></i></span>
                 <span>Artists & Labels</span>
@@ -76,7 +96,7 @@ $current_page = basename($_SERVER['PHP_SELF'], '.php');
             <a href="admin-contacts" class="nav-item <?= $current_page === 'admin-contacts' ? 'active' : '' ?>">
                 <span class="nav-icon"><i class="fa-solid fa-envelope-open-text"></i></span>
                 <span>Inquiries</span>
-                <?php if (isset($contacts_count) && $contacts_count > 0): ?>
+                <?php if ($contacts_count > 0): ?>
                     <span class="nav-badge"><?= $contacts_count ?></span>
                 <?php endif; ?>
             </a>
