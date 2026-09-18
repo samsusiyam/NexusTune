@@ -184,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action_resend_code'])
 <div class="auth-card" style="max-width: 480px; text-align: center;">
     <div class="auth-header">
         <div class="auth-logo" style="justify-content: center; margin-bottom: 20px;">
-            <a href="../">
+            <a href="https://www.nexustune.com/">
                 <img src="assets/images/logo.png" alt="Nexus Tune" style="height: 48px; max-width: 240px; object-fit: contain;">
             </a>
         </div>
