@@ -299,7 +299,16 @@ class NexusMailer {
 
             $subject = "Nexus Tune SMTP Live Test Delivery";
             $time_str = date('Y-m-d H:i:s T');
-            $body = "<p>Congratulations! Your SMTP mail server configuration on <strong>Nexus Tune</strong> is operating perfectly.</p><p>Sent from: <code>{$from_email}</code> via <code>{$host}:{$port}</code></p><p>Timestamp: <code>{$time_str}</code></p>";
+            $body = <<<HTML
+            <h2 style="margin: 0 0 16px 0; color: #ffffff !important; font-size: 22px; font-weight: 700;">SMTP Test Delivery Success 🎉</h2>
+            <p style="margin: 0 0 16px 0; color: #e2e8f0 !important; font-size: 15px; line-height: 1.6;">Congratulations! Your SMTP mail server configuration on <strong>Nexus Tune</strong> is operating perfectly.</p>
+            <div style="background-color: #05070d; border: 1px solid #1e293b; border-radius: 10px; padding: 16px 20px; margin: 20px 0;">
+                <div style="color: #94a3b8; font-size: 13px; margin-bottom: 6px;"><strong style="color: #ffffff;">From:</strong> {$from_email}</div>
+                <div style="color: #94a3b8; font-size: 13px; margin-bottom: 6px;"><strong style="color: #ffffff;">Relay Server:</strong> {$host}:{$port} ({$secure})</div>
+                <div style="color: #94a3b8; font-size: 13px;"><strong style="color: #ffffff;">Timestamp:</strong> {$time_str}</div>
+            </div>
+            <p style="margin: 0; color: #57ff52 !important; font-size: 14px; font-weight: 600;">✅ All outgoing system notifications & OTP verifications are active and ready.</p>
+HTML;
             $html = renderNexusEmail($subject, "SMTP Test Delivery Success", $body);
             $plain_text = "Nexus Tune SMTP Live Test Delivery\n\nCongratulations! Your SMTP mail server configuration on Nexus Tune is operating perfectly.\nSent from: {$from_email} via {$host}:{$port}\nTimestamp: {$time_str}\n";
 
@@ -387,43 +396,111 @@ class NexusMailer {
 }
 
 /**
- * Base Cyber-Luxe HTML Email Wrapper
+ * Base Bulletproof Cyber-Luxe HTML Email Wrapper
+ * Fully optimized for Dark Mode & Light Mode rendering across all email clients
  */
 function renderNexusEmail($title, $preheader, $contentHtml) {
     return <<<HTML
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="light dark">
+    <meta name="supported-color-schemes" content="light dark">
     <title>{$title}</title>
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
     <style>
-        body { margin: 0; padding: 0; background-color: #07090e; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #f3f4f6; }
-        .wrapper { width: 100%; max-width: 600px; margin: 0 auto; background-color: #0e131d; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; overflow: hidden; }
-        .header { padding: 32px 24px; text-align: center; background: linear-gradient(180deg, rgba(87, 255, 82, 0.06) 0%, rgba(14, 19, 29, 0) 100%); border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
-        .body-content { padding: 36px 32px; font-size: 15px; line-height: 1.7; color: #e5e7eb; }
-        .btn-primary { display: inline-block; background-color: #57ff52; color: #000000 !important; font-weight: 700; font-size: 15px; text-decoration: none; padding: 14px 36px; border-radius: 9999px; text-align: center; margin: 24px 0; box-shadow: 0 0 25px rgba(87, 255, 82, 0.35); }
-        .footer { padding: 24px 32px; background-color: #07090e; border-top: 1px solid rgba(255, 255, 255, 0.06); font-size: 12px; color: #6b7280; text-align: center; line-height: 1.6; }
-        .code-box { background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 13px; color: #57ff52; word-break: break-all; margin-top: 12px; }
+        :root {
+            color-scheme: light dark;
+            supported-color-schemes: light dark;
+        }
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+        body { margin: 0; padding: 0; width: 100% !important; background-color: #070a12; }
+        
+        /* Client Dark Mode Overrides */
+        [data-ogsc] .email-bg { background-color: #070a12 !important; }
+        [data-ogsc] .card-bg { background-color: #0e1422 !important; }
+        [data-ogsc] .text-main { color: #e2e8f0 !important; }
+        [data-ogsc] .text-title { color: #ffffff !important; }
+        
+        @media (prefers-color-scheme: dark) {
+            .email-bg { background-color: #070a12 !important; }
+            .card-bg { background-color: #0e1422 !important; }
+            .text-main { color: #e2e8f0 !important; }
+            .text-title { color: #ffffff !important; }
+        }
+        @media only screen and (max-width: 600px) {
+            .email-container { width: 100% !important; max-width: 100% !important; }
+            .content-padding { padding: 28px 20px !important; }
+            .header-padding { padding: 24px 20px !important; }
+        }
     </style>
 </head>
-<body style="background-color: #07090e; padding: 30px 10px;">
-    <div style="display: none; max-height: 0px; overflow: hidden;">{$preheader}</div>
-    <div class="wrapper">
-        <div class="header">
-            <a href="https://nexustune.com" target="_blank" style="text-decoration: none;">
-                <img src="https://nexustune.com/logo.png" alt="Nexus Tune" style="height: 42px; max-width: 220px; object-fit: contain;">
-            </a>
-        </div>
-        <div class="body-content">
-            {$contentHtml}
-        </div>
-        <div class="footer">
-            <p style="margin: 0 0 8px;"><strong>Nexus Tune Global Music Distribution</strong></p>
-            <p style="margin: 0 0 8px;">Paris (France) • Mumbai (India) • Dhaka (Bangladesh)</p>
-            <p style="margin: 0;">This is an automated operational notification. If you did not make this request, please ignore or contact <a href="mailto:support@nexustune.com" style="color: #57ff52; text-decoration: none;">support@nexustune.com</a>.</p>
-        </div>
+<body class="email-bg" bgcolor="#070a12" style="margin: 0; padding: 0; background-color: #070a12; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+    <!-- Preheader preview text -->
+    <div style="display: none; max-height: 0px; overflow: hidden; mso-hide: all; font-size: 1px; line-height: 1px; color: #070a12; opacity: 0;">
+        {$preheader}
     </div>
+
+    <!-- Outer Table -->
+    <table role="presentation" class="email-bg" border="0" cellpadding="0" cellspacing="0" width="100%" bgcolor="#070a12" style="background-color: #070a12; table-layout: fixed;">
+        <tr>
+            <td align="center" style="padding: 30px 12px;">
+                <!-- Main Container Card -->
+                <table role="presentation" class="email-container card-bg" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 580px; background-color: #0e1422; border: 1px solid #1e293b; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 35px rgba(0,0,0,0.5);">
+                    
+                    <!-- Header -->
+                    <tr>
+                        <td align="center" class="header-padding" bgcolor="#0b0f19" style="padding: 30px 24px; background-color: #0b0f19; border-bottom: 1px solid #1e293b; text-align: center;">
+                            <a href="https://nexustune.com" target="_blank" style="text-decoration: none; display: inline-block;">
+                                <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 26px; font-weight: 800; letter-spacing: -0.5px; line-height: 1.2;">
+                                    <span style="color: #ffffff !important;">NEXUS</span><span style="color: #57ff52 !important;">TUNE</span>
+                                </div>
+                                <div style="font-size: 10.5px; text-transform: uppercase; letter-spacing: 2.5px; color: #94a3b8 !important; margin-top: 4px; font-weight: 600;">
+                                    Global Music Distribution
+                                </div>
+                            </a>
+                        </td>
+                    </tr>
+
+                    <!-- Body Content -->
+                    <tr>
+                        <td class="content-padding text-main" bgcolor="#0e1422" style="padding: 36px 32px; background-color: #0e1422; font-size: 15px; line-height: 1.65; color: #e2e8f0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                            {$contentHtml}
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td align="center" bgcolor="#070a12" style="padding: 24px 30px; background-color: #070a12; border-top: 1px solid #1e293b; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                            <p style="margin: 0 0 6px 0; color: #94a3b8 !important; font-size: 12px; font-weight: 600;">
+                                Nexus Tune Global Music Distribution
+                            </p>
+                            <p style="margin: 0 0 10px 0; color: #64748b !important; font-size: 11.5px;">
+                                Paris (France) &bull; Mumbai (India) &bull; Dhaka (Bangladesh)
+                            </p>
+                            <p style="margin: 0; color: #64748b !important; font-size: 11px; line-height: 1.5;">
+                                This is an automated operational notification. If you did not make this request, please contact <a href="mailto:support@nexustune.com" style="color: #57ff52 !important; text-decoration: underline;">support@nexustune.com</a>.
+                            </p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
 HTML;
@@ -437,19 +514,32 @@ function sendSignupOtpEmail($to_email, $name, $code) {
     $preheader = "Your 6-digit activation code is $code. Enter this code to verify your artist account.";
 
     $content = <<<HTML
-    <h2 style="color: #ffffff; margin-top: 0; font-size: 22px; font-weight: 700;">Welcome to Nexus Tune, {$name}! 🎵</h2>
-    <p>Thank you for creating your artist account with <strong>Nexus Tune Global Distribution</strong>.</p>
-    <p>To verify your email address and activate your artist workspace, please enter the following 6-digit verification code on the verification screen:</p>
+    <h2 style="margin: 0 0 16px 0; color: #ffffff !important; font-size: 22px; font-weight: 700; line-height: 1.3;">Welcome to Nexus Tune, {$name}! 🎵</h2>
+    <p style="margin: 0 0 16px 0; color: #e2e8f0 !important; font-size: 15px; line-height: 1.65;">
+        Thank you for creating your artist account with <strong style="color: #ffffff;">Nexus Tune Global Distribution</strong>.
+    </p>
+    <p style="margin: 0 0 20px 0; color: #e2e8f0 !important; font-size: 15px; line-height: 1.65;">
+        To verify your email address and activate your artist workspace, please enter this 6-digit verification code:
+    </p>
     
-    <div style="text-align: center; margin: 28px 0;">
-        <div style="display: inline-block; background: rgba(87, 255, 82, 0.08); border: 2px solid #57ff52; border-radius: 16px; padding: 18px 36px; box-shadow: 0 0 30px rgba(87, 255, 82, 0.25);">
-            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #57ff52; margin-bottom: 6px; font-weight: 700;">6-Digit Activation Code</div>
-            <div style="font-family: 'SFMono-Regular', Consolas, Monaco, monospace; font-size: 36px; font-weight: 800; letter-spacing: 12px; color: #ffffff;">{$code}</div>
-        </div>
-    </div>
+    <!-- Bulletproof Code Box Table -->
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 24px 0;">
+        <tr>
+            <td align="center">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto;">
+                    <tr>
+                        <td align="center" bgcolor="#05070d" style="background-color: #05070d; border: 2px solid #57ff52; border-radius: 14px; padding: 20px 36px; text-align: center;">
+                            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; color: #57ff52 !important; font-weight: 700; margin-bottom: 8px;">6-Digit Activation Code</div>
+                            <div style="font-family: 'Courier New', Courier, monospace, monospace; font-size: 38px; font-weight: 800; letter-spacing: 12px; color: #ffffff !important; line-height: 1;">{$code}</div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 
-    <p style="font-size: 13.5px; color: #9ca3af; text-align: center; line-height: 1.5;">
-        This code is valid for <strong>15 minutes</strong>. If you did not request this verification, please ignore this message.
+    <p style="margin: 20px 0 0 0; font-size: 13.5px; color: #94a3b8 !important; text-align: center; line-height: 1.5;">
+        This code is valid for <strong style="color: #ffffff;">15 minutes</strong>. If you did not request this verification, you can safely ignore this message.
     </p>
 HTML;
 
@@ -474,19 +564,36 @@ function sendPasswordResetEmail($to_email, $name, $token) {
     $preheader = "Password recovery instructions for your Nexus Tune Artist Portal.";
 
     $content = <<<HTML
-    <h2 style="color: #ffffff; margin-top: 0; font-size: 22px; font-weight: 700;">Password Reset Request</h2>
-    <p>Hello <strong>{$name}</strong>,</p>
-    <p>We received a request to reset the password for your Nexus Tune account associated with <strong>{$to_email}</strong>.</p>
-    <p>Click the button below to choose a new password and regain instant access to your artist dashboard:</p>
+    <h2 style="margin: 0 0 16px 0; color: #ffffff !important; font-size: 22px; font-weight: 700; line-height: 1.3;">Password Reset Request</h2>
+    <p style="margin: 0 0 16px 0; color: #e2e8f0 !important; font-size: 15px; line-height: 1.65;">Hello <strong style="color: #ffffff;">{$name}</strong>,</p>
+    <p style="margin: 0 0 16px 0; color: #e2e8f0 !important; font-size: 15px; line-height: 1.65;">We received a request to reset the password for your Nexus Tune account associated with <strong style="color: #ffffff;">{$to_email}</strong>.</p>
+    <p style="margin: 0 0 20px 0; color: #e2e8f0 !important; font-size: 15px; line-height: 1.65;">Click the button below to choose a new password and regain instant access to your artist dashboard:</p>
     
-    <div style="text-align: center; margin: 30px 0;">
-        <a href="{$reset_url}" class="btn-primary" target="_blank">Reset Your Password &rarr;</a>
+    <!-- Bulletproof Button -->
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin: 28px 0;">
+        <tr>
+            <td align="center">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="center" bgcolor="#57ff52" style="border-radius: 9999px; background-color: #57ff52;">
+                            <a href="{$reset_url}" target="_blank" style="display: inline-block; padding: 14px 34px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 15px; font-weight: 700; color: #000000 !important; text-decoration: none; border-radius: 9999px; line-height: 1;">
+                                Reset Your Password &rarr;
+                            </a>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <p style="margin: 20px 0 6px 0; font-size: 13px; color: #94a3b8 !important;">Or copy and paste this link into your browser:</p>
+    <div style="background-color: #05070d; border: 1px solid #1e293b; border-radius: 8px; padding: 12px 14px; font-family: 'Courier New', Courier, monospace; font-size: 12.5px; color: #57ff52 !important; word-break: break-all;">
+        {$reset_url}
     </div>
 
-    <p style="font-size: 13px; color: #9ca3af;">Or paste this link into your browser:</p>
-    <div class="code-box">{$reset_url}</div>
-
-    <p style="font-size: 12px; color: #6b7280; margin-top: 24px;">Note: For your security, this reset link will expire in <strong>2 hours</strong>. If you did not request a password reset, you can safely ignore this email — your account remains secure.</p>
+    <p style="margin: 24px 0 0 0; font-size: 12px; color: #64748b !important; line-height: 1.5;">
+        Note: For your security, this reset link will expire in <strong style="color: #94a3b8;">2 hours</strong>. If you did not request a password reset, you can safely ignore this email &mdash; your account remains secure.
+    </p>
 HTML;
 
     $html = renderNexusEmail($subject, $preheader, $content);
