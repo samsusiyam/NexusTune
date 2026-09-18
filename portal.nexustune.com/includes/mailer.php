@@ -39,6 +39,9 @@ class NexusMailer {
     /**
      * Send email via Direct Socket SMTP with TLS/SSL
      */
+    /**
+     * Send email via Direct Socket SMTP with TLS/SSL
+     */
     public function send($to_email, $to_name, $subject, $html_body, $alt_body = '') {
         // If password is not configured or in local offline mode, record to mail log and attempt fallback
         if (empty($this->pass) || !$this->enabled) {
@@ -54,18 +57,26 @@ class NexusMailer {
 
         try {
             $timeout = 15;
-            $host = $this->host;
-            if ($this->secure === 'ssl') {
-                $host = 'ssl://' . $host;
-            }
+            $scheme = ($this->secure === 'ssl') ? 'ssl://' : 'tcp://';
+            $remote_addr = $scheme . $this->host . ':' . $this->port;
 
-            $socket = @fsockopen($host, $this->port, $errno, $errstr, $timeout);
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ]
+            ]);
+
+            $socket = @stream_socket_client($remote_addr, $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT, $context);
             if (!$socket) {
                 $this->logMail($to_email, $subject, $html_body, "Socket error ($errno): $errstr");
                 return false;
             }
 
-            $response = fgets($socket, 515);
+            stream_set_timeout($socket, $timeout);
+
+            $response = $this->readResponse($socket);
             if (empty($response) || substr($response, 0, 3) !== '220') {
                 fclose($socket);
                 $this->logMail($to_email, $subject, $html_body, "Invalid initial response: $response");
@@ -76,7 +87,13 @@ class NexusMailer {
 
             // STARTTLS Negotiation
             if ($this->secure === 'tls') {
-                $this->cmd($socket, "STARTTLS");
+                $tls_reply = $this->cmd($socket, "STARTTLS");
+                if (substr($tls_reply, 0, 3) !== '220') {
+                    fclose($socket);
+                    $this->logMail($to_email, $subject, $html_body, "STARTTLS rejected: $tls_reply");
+                    return false;
+                }
+
                 $crypto_method = STREAM_CRYPTO_METHOD_TLS_CLIENT;
                 if (defined('STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT')) {
                     $crypto_method |= STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
@@ -84,6 +101,7 @@ class NexusMailer {
                 if (defined('STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT')) {
                     $crypto_method |= STREAM_CRYPTO_METHOD_TLSv1_3_CLIENT;
                 }
+
                 $secure_ok = stream_socket_enable_crypto($socket, true, $crypto_method);
                 if (!$secure_ok) {
                     fclose($socket);
@@ -136,7 +154,7 @@ class NexusMailer {
             $message .= "\r\n.\r\n";
 
             fputs($socket, $message);
-            $send_res = fgets($socket, 515);
+            $send_res = $this->readResponse($socket);
 
             $this->cmd($socket, "QUIT");
             fclose($socket);
@@ -170,20 +188,28 @@ class NexusMailer {
 
         try {
             $timeout = 15;
-            $host = $this->host;
-            if ($this->secure === 'ssl') {
-                $host = 'ssl://' . $host;
-            }
+            $scheme = ($this->secure === 'ssl') ? 'ssl://' : 'tcp://';
+            $remote_addr = $scheme . $this->host . ':' . $this->port;
 
-            $logs[] = "Connecting to socket: $host:$this->port...";
-            $socket = @fsockopen($host, $this->port, $errno, $errstr, $timeout);
+            $logs[] = "Connecting to socket: $remote_addr...";
+            $context = stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                    'allow_self_signed' => true,
+                ]
+            ]);
+
+            $socket = @stream_socket_client($remote_addr, $errno, $errstr, $timeout, STREAM_CLIENT_CONNECT, $context);
             if (!$socket) {
                 $logs[] = "❌ Socket Error ($errno): $errstr";
                 return ['success' => false, 'logs' => $logs, 'message' => "Socket connection failed: $errstr (Code $errno)"];
             }
             $logs[] = "✅ TCP Socket connected successfully.";
 
-            $response = fgets($socket, 515);
+            stream_set_timeout($socket, $timeout);
+
+            $response = $this->readResponse($socket);
             $logs[] = "<- " . trim($response);
             if (empty($response) || substr($response, 0, 3) !== '220') {
                 fclose($socket);
@@ -199,6 +225,12 @@ class NexusMailer {
                 $logs[] = "-> STARTTLS";
                 $tls_res = $this->cmd($socket, "STARTTLS");
                 $logs[] = "<- " . trim($tls_res);
+
+                if (substr($tls_res, 0, 3) !== '220') {
+                    fclose($socket);
+                    $logs[] = "❌ Server rejected STARTTLS with: " . trim($tls_res);
+                    return ['success' => false, 'logs' => $logs, 'message' => "Server rejected STARTTLS: " . trim($tls_res)];
+                }
 
                 $crypto_method = STREAM_CRYPTO_METHOD_TLS_CLIENT;
                 if (defined('STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT')) $crypto_method |= STREAM_CRYPTO_METHOD_TLSv1_2_CLIENT;
@@ -259,7 +291,7 @@ class NexusMailer {
 
             $message = $headers . $html . "\r\n.\r\n";
             fputs($socket, $message);
-            $send_res = fgets($socket, 515);
+            $send_res = $this->readResponse($socket);
             $logs[] = "<- " . trim($send_res);
 
             $this->cmd($socket, "QUIT");
@@ -274,14 +306,21 @@ class NexusMailer {
         }
     }
 
-    private function cmd($socket, $cmd) {
-        fputs($socket, $cmd . "\r\n");
+    private function readResponse($socket) {
         $res = '';
         while ($line = fgets($socket, 515)) {
             $res .= $line;
-            if (isset($line[3]) && $line[3] === ' ') break;
+            // In RFC 5321, the last line of a multiline response has space after 3-digit code (e.g. '250 ' or '220 ')
+            if (preg_match('/^\d{3}\s/', $line)) {
+                break;
+            }
         }
         return $res;
+    }
+
+    private function cmd($socket, $cmd) {
+        fputs($socket, $cmd . "\r\n");
+        return $this->readResponse($socket);
     }
 
     private function logMail($to, $subject, $body, $status = 'Logged/Fallback') {
