@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /assets/sites/*/searchIndex*
+
+Sitemap: https://nexustune.com/sitemap.xml
+Sitemap: https://legal.nexustune.com/sitemap.xml

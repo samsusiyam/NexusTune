@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>Audio Content & Mastering Guidelines | Nexus Tune</title>
+    <meta name="description" content="Audio formatting, sample rate, bit depth, and mastering quality standards for delivering lossless music tracks to DSP streaming platforms with Nexus Tune.">
+    <meta name="keywords" content="Music audio formatting guidelines, WAV 24bit 44.1kHz requirements, DSP ingestion audio standards, audio mastering guidelines">
+    <meta name="author" content="Nexus Tune">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://legal.nexustune.com/nexus-tune-audio-content-guidelines/">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:site_name" content="Nexus Tune Legal">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Audio Content & Mastering Guidelines | Nexus Tune">
+    <meta property="og:description" content="Audio formatting, sample rate, bit depth, and mastering quality standards for delivering lossless music tracks to DSP streaming platforms with Nexus Tune.">
+    <meta property="og:url" content="https://legal.nexustune.com/nexus-tune-audio-content-guidelines/">
+    <meta property="og:image" content="https://nexustune.com/logo.png">
+    <meta property="og:image:alt" content="Nexus Tune Legal & Policies">
+
+    <!-- Twitter Cards -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@nexustune">
+    <meta name="twitter:creator" content="@nexustune">
+    <meta name="twitter:title" content="Audio Content & Mastering Guidelines | Nexus Tune">
+    <meta name="twitter:description" content="Audio formatting, sample rate, bit depth, and mastering quality standards for delivering lossless music tracks to DSP streaming platforms with Nexus Tune.">
+    <meta name="twitter:image" content="https://nexustune.com/logo.png">
+
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="../favicon.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Unbounded:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@graph": [
+        {
+            "@type": "WebPage",
+            "@id": "https://legal.nexustune.com/nexus-tune-audio-content-guidelines/#webpage",
+            "url": "https://legal.nexustune.com/nexus-tune-audio-content-guidelines/",
+            "name": "Audio Content & Mastering Guidelines | Nexus Tune",
+            "description": "Audio formatting, sample rate, bit depth, and mastering quality standards for delivering lossless music tracks to DSP streaming platforms with Nexus Tune.",
+            "isPartOf": {
+                "@type": "WebSite",
+                "@id": "https://legal.nexustune.com/#website",
+                "url": "https://legal.nexustune.com/",
+                "name": "Nexus Tune Legal & Compliance Center",
+                "publisher": {
+                    "@type": "Organization",
+                    "name": "Nexus Tune",
+                    "url": "https://nexustune.com",
+                    "logo": "https://nexustune.com/logo.png"
+                }
+            },
+            "inLanguage": "en-US"
+        },
+        {
+            "@type": "BreadcrumbList",
+            "@id": "https://legal.nexustune.com/nexus-tune-audio-content-guidelines/#breadcrumb",
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Nexus Tune",
+                    "item": "https://nexustune.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Legal Center",
+                    "item": "https://legal.nexustune.com/"
+                },
+                {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": "Audio Content Guidelines",
+                    "item": "https://legal.nexustune.com/nexus-tune-audio-content-guidelines/"
+                }
+            ]
+        }
+    ]
+}
+    </script>
+
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg-card: #121212;
+            --bg-surface: #181818;
+            --bg-hover: #222222;
+            --accent-green: #57ff52;
+            --accent-green-hover: #45e040;
+            --accent-dim: rgba(87, 255, 82, 0.12);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(255, 255, 255, 0.18);
+            --text-primary: #f5f5f5;
+            --text-secondary: #a3a3a3;
+            --text-muted: #737373;
+            --font-main: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-heading: 'Unbounded', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            line-height: 1.7;
+            font-size: 15px;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        /* Header */
+        header.legal-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.85rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo-badge {
+            background: linear-gradient(135deg, #1f1f1f 0%, #141414 100%);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 999px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-badge span.brand-name {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            text-transform: uppercase;
+        }
+
+        .logo-badge span.legal-tag {
+            background: var(--accent-dim);
+            color: var(--accent-green);
+            font-size: 10.5px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 99px;
+            text-transform: uppercase;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .btn-home {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 7px 12px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .btn-home:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .btn-client {
+            background: var(--accent-green);
+            color: #000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 12.5px;
+            padding: 7px 16px;
+            border-radius: 99px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-client:hover {
+            background: var(--accent-green-hover);
+        }
+
+        /* Mobile Menu Toggle Button */
+        .mobile-menu-btn {
+            display: none;
+            background: #181818;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Container & Layout */
+        .legal-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 290px 1fr;
+            min-height: calc(100vh - 65px);
+        }
+
+        /* Sidebar Navigation */
+        aside.legal-sidebar {
+            position: sticky;
+            top: 65px;
+            height: calc(100vh - 65px);
+            overflow-y: auto;
+            padding: 1.75rem 1rem;
+            border-right: 1px solid var(--border-color);
+            background: #0d0d0d;
+        }
+
+        .sidebar-group {
+            margin-bottom: 1.35rem;
+        }
+
+        .sidebar-title {
+            font-size: 10.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+            padding-left: 0.5rem;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .nav-item {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 7px 10px;
+            border-radius: 7px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            line-height: 1.4;
+        }
+
+        .nav-item .bullet {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.04);
+            transform: translateX(2px);
+        }
+
+        .nav-item:hover .bullet {
+            background: #fff;
+        }
+
+        .nav-item.active {
+            color: var(--accent-green);
+            background: var(--accent-dim);
+            font-weight: 600;
+            border-left: 3px solid var(--accent-green);
+            border-radius: 0 7px 7px 0;
+        }
+
+        .nav-item.active .bullet {
+            background: var(--accent-green);
+            transform: scale(1.3);
+        }
+
+        /* Main Content */
+        main.legal-content {
+            padding: 3rem 3.5rem 6rem;
+            max-width: 960px;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .doc-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .doc-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            line-height: 1.25;
+            word-break: break-word;
+        }
+
+        .doc-header .doc-meta {
+            font-size: 12.5px;
+            color: var(--accent-green);
+            font-weight: 500;
+        }
+
+        /* Typography & Content Styling */
+        .content-body {
+            color: var(--text-secondary);
+            font-size: 15px;
+            word-break: break-word;
+        }
+
+        .content-body h1, .content-body h2, .content-body h3, .content-body h4 {
+            color: #ffffff;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 0.9rem;
+            line-height: 1.35;
+        }
+
+        .content-body h2 {
+            font-size: 1.35rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            padding-bottom: 0.4rem;
+        }
+
+        .content-body h3 {
+            font-size: 1.15rem;
+        }
+
+        .content-body p {
+            margin-bottom: 1.2rem;
+        }
+
+        .content-body ul, .content-body ol {
+            margin-left: 1.4rem;
+            margin-bottom: 1.3rem;
+        }
+
+        .content-body li {
+            margin-bottom: 0.45rem;
+        }
+
+        .content-body strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .content-body a {
+            color: var(--accent-green);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .content-body a:hover {
+            color: var(--accent-green-hover);
+        }
+
+        .content-body table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.75rem 0;
+            border-radius: 8px;
+            overflow-x: auto;
+            display: block;
+            background: var(--bg-card);
+        }
+
+        .content-body th, .content-body td {
+            padding: 10px 14px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .content-body th {
+            background: rgba(255, 255, 255, 0.04);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* Special Card & Tool Styles */
+        .isrc-tool-card, .complaint-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 2rem;
+            margin-top: 1.25rem;
+        }
+
+        .isrc-header h2 {
+            color: #fff;
+            font-size: 1.4rem;
+            margin-bottom: 0.4rem;
+        }
+
+        .isrc-search-bar {
+            display: flex;
+            gap: 10px;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .isrc-search-bar input, .legal-form input, .legal-form textarea {
+            flex: 1;
+            min-width: 220px;
+            background: #000;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 12px 16px;
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .isrc-search-bar input:focus, .legal-form input:focus, .legal-form textarea:focus {
+            border-color: var(--accent-green);
+        }
+
+        .isrc-search-bar button, .submit-btn {
+            background: var(--accent-green);
+            color: #000;
+            border: none;
+            padding: 12px 22px;
+            border-radius: 9px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .isrc-search-bar button:hover, .submit-btn:hover {
+            background: var(--accent-green-hover);
+        }
+
+        .isrc-result-card {
+            background: var(--bg-surface);
+            border: 1px solid rgba(87, 255, 82, 0.25);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.25rem;
+        }
+
+        .hidden { display: none !important; }
+
+        .isrc-code-badge {
+            display: inline-block;
+            background: var(--accent-dim);
+            color: var(--accent-green);
+            font-family: monospace;
+            font-size: 1.15rem;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 0.4rem;
+            border: 1px dashed var(--accent-green);
+        }
+
+        /* Legal Form */
+        .legal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+            margin-top: 1.25rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .form-checkbox {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin: 0.4rem 0;
+        }
+
+        .form-checkbox input {
+            margin-top: 4px;
+            accent-color: var(--accent-green);
+        }
+
+        /* Footer */
+        footer.legal-footer {
+            background: #070707;
+            border-top: 1px solid var(--border-color);
+            padding: 3.5rem 1.5rem 2rem;
+            color: var(--text-muted);
+            font-size: 13px;
+            width: 100%;
+        }
+
+        .footer-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.1fr 2fr;
+            gap: 2.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .footer-brand h4 {
+            font-family: var(--font-heading);
+            color: #fff;
+            font-size: 15px;
+            margin-bottom: 0.4rem;
+        }
+
+        .offices-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.25rem;
+        }
+
+        .office-card h5 {
+            color: var(--accent-green);
+            font-size: 11.5px;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.5px;
+        }
+
+        .office-card p {
+            line-height: 1.45;
+            color: var(--text-secondary);
+            font-size: 12.5px;
+        }
+
+        .footer-bottom {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-top: 1.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1024px) {
+            .legal-layout {
+                grid-template-columns: 1fr;
+            }
+            .mobile-menu-btn {
+                display: inline-flex;
+            }
+            aside.legal-sidebar {
+                display: none;
+                position: fixed;
+                top: 58px;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: calc(100vh - 58px);
+                z-index: 999;
+                background: #0a0a0a;
+                padding: 1.5rem;
+                overflow-y: auto;
+            }
+            aside.legal-sidebar.mobile-open {
+                display: block;
+            }
+            main.legal-content {
+                padding: 2rem 1.25rem 4rem;
+                max-width: 100%;
+            }
+            .doc-header h1 {
+                font-size: 1.65rem;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            .offices-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            header.legal-header {
+                padding: 0.75rem 1rem;
+            }
+            .logo-badge span.brand-name {
+                font-size: 12px;
+            }
+            .btn-home {
+                display: none;
+            }
+            .isrc-tool-card, .complaint-card {
+                padding: 1.25rem;
+            }
+            .isrc-search-bar {
+                flex-direction: column;
+            }
+            .isrc-search-bar button {
+                width: 100%;
+            }
+            .footer-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="legal-header">
+        <a href="../../" class="logo-group">
+            <div class="logo-badge">
+                <span class="brand-name">Nexus Tune</span>
+                <span class="legal-tag">Legal</span>
+            </div>
+        </a>
+        <div class="nav-actions">
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle Menu">
+                <span id="menuIcon">☰</span> Menu
+            </button>
+            <a href="../../" class="btn-home">← Back to Main Site</a>
+            <a href="../" class="btn-home">Legal Portal</a>
+            <a href="portal.nexustune.com/login" target="_blank" class="btn-client">Login</a>
+        </div>
+    </header>
+
+    <div class="legal-layout">
+        <aside class="legal-sidebar" id="legalSidebar">
+            
+        <div class="sidebar-group">
+            <div class="sidebar-title">Company & Overview</div>
+            <div class="sidebar-nav">
+                <a href="../about-us/" class="nav-item "><span class="bullet"></span>About Us</a>
+            </div>
+        </div>
+        
+
+        <div class="sidebar-group">
+            <div class="sidebar-title">Data & Privacy</div>
+            <div class="sidebar-nav">
+                <a href="../privacy-policy/" class="nav-item "><span class="bullet"></span>Privacy Policy</a><a href="../cookie-policy/" class="nav-item "><span class="bullet"></span>Cookie Policy</a>
+            </div>
+        </div>
+        
+
+        <div class="sidebar-group">
+            <div class="sidebar-title">Billing & Terms</div>
+            <div class="sidebar-nav">
+                <a href="../refund-policy/" class="nav-item "><span class="bullet"></span>Refund Policy</a><a href="../terms-conditions/" class="nav-item "><span class="bullet"></span>Terms & Conditions</a><a href="../nexus-tune-disclaimer/" class="nav-item "><span class="bullet"></span>Nexus Tune Disclaimer</a>
+            </div>
+        </div>
+        
+
+        <div class="sidebar-group">
+            <div class="sidebar-title">Distribution & Royalties</div>
+            <div class="sidebar-nav">
+                <a href="../distribution-agreement/" class="nav-item "><span class="bullet"></span>Distribution Agreement</a><a href="../ai-music-policy/" class="nav-item "><span class="bullet"></span>AI Music Policy</a><a href="../nexus-tune-audio-content-guidelines/" class="nav-item active"><span class="bullet"></span>Audio Content Guidelines</a>
+            </div>
+        </div>
+        
+
+        <div class="sidebar-group">
+            <div class="sidebar-title">Copyright & Protection</div>
+            <div class="sidebar-nav">
+                <a href="../copyright-dmca-policy/" class="nav-item "><span class="bullet"></span>Copyright & DMCA Policy</a><a href="../copyright-dispute-dmca-takedown-center/" class="nav-item "><span class="bullet"></span>Copyright Dispute & DMCA Takedown Center</a><a href="../copyright-complaint/" class="nav-item "><span class="bullet"></span>Copyright Complaint Form</a>
+            </div>
+        </div>
+        
+
+        <div class="sidebar-group">
+            <div class="sidebar-title">Tools & Utilities</div>
+            <div class="sidebar-nav">
+                <a href="../isrc/" class="nav-item "><span class="bullet"></span>ISRC Finder</a><a href="../isrc-terms-conditions/" class="nav-item "><span class="bullet"></span>ISRC Terms & Conditions</a>
+            </div>
+        </div>
+        
+        </aside>
+
+        <main class="legal-content">
+            <div class="doc-header">
+                <h1>Audio Content Guidelines</h1>
+                <div class="doc-meta">Nexus Tune Official Legal & Compliance Document • Published 2025</div>
+            </div>
+
+            <div class="content-body">
+                <div class="entry-content alignfull wp-block-post-content has-global-padding is-layout-constrained wp-block-post-content-is-layout-constrained">
+<h3 class="wp-block-heading"><strong>1. Introduction</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">These Audio Content Guidelines ("Guidelines") apply to all audio recordings submitted to Nexus Tune for digital distribution, publishing administration, rights management, monetization, and related services.</p>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">By uploading any audio content through Nexus Tune, you acknowledge that you have read, understood, and agree to comply with these Guidelines.</p>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">Failure to comply may result in rejection, suspension, removal, delayed distribution, withholding of royalties, or termination of your Account.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>2. Content Ownership</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">You may only upload audio recordings that you legally own or are fully authorized to distribute.</p>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">You represent and warrant that you possess all necessary rights, licenses, permissions, approvals, and consents required for the submitted Content.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>3. Audio Quality Requirements</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">All submitted audio must:</p>
+
+
+
+<ul class="wp-block-list">
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">be the final mastered version;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">be free from technical defects;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">be free from excessive clipping or distortion;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">not contain corrupted audio;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">meet Nexus Tune's technical specifications; and</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">comply with applicable DSP requirements.</li>
+</ul>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">Nexus Tune reserves the right to reject poor-quality recordings.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>4. Original Content</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">The submitted recording must not unlawfully copy, reproduce, or infringe the work of another person or entity.</p>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">Unauthorized reproductions are strictly prohibited.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>5. Samples</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">If your recording contains any samples, loops, sound recordings, or third-party material, you must obtain all required permissions before submission.</p>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">Nexus Tune will not obtain sample clearances on your behalf.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>6. Cover Songs</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">Where applicable, you are solely responsible for obtaining all licenses required for the lawful distribution of cover songs.</p>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">Submission of a cover song does not constitute confirmation that the necessary licenses have been obtained.</p>
+
+
+
+<hr class="wp-block-separator has-alpha-channel-opacity"/>
+
+
+
+<h3 class="wp-block-heading"><strong>7. AI-Generated Content</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">AI-generated or AI-assisted recordings may be submitted only if they comply with:</p>
+
+
+
+<ul class="wp-block-list">
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">the <a href="../ai-music-policy/" data-type="page" data-id="51">Nexus Tune AI Music Policy</a>;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">applicable laws; and</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">Digital Service Provider policies.</li>
+</ul>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">You remain solely responsible for obtaining all required rights relating to AI-generated content.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>8. Explicit Content</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">Recordings containing explicit lyrics or mature content must be accurately identified as Explicit where required.</p>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">Failure to correctly identify explicit content may result in rejection or removal.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>9. Prohibited Audio Content</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">You must not upload Content that:</p>
+
+
+
+<ul class="wp-block-list">
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">infringes intellectual property rights;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">contains unlawful material;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">promotes terrorism or violent extremism;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">contains child sexual abuse material;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">contains malware or harmful code;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">contains deceptive or fraudulent recordings;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">impersonates another artist without authorization;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">violates applicable laws;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">violates DSP policies; or</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">otherwise presents legal, regulatory, or reputational risks.</li>
+</ul>
+
+
+
+<h3 class="wp-block-heading"><strong>10. Metadata Accuracy</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">You must ensure that all metadata submitted with your recording is complete, accurate, and truthful.</p>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">This includes:</p>
+
+
+
+<ul class="wp-block-list">
+<li class="has-small-font-size">Artist Name</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">Release Title</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">Track Title</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">Composer</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">Lyricist</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">Producer</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">ISRC</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">Language</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">Genre</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">Release Date</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">Copyright Information</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">AI Disclosure (where applicable)</li>
+</ul>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">False or misleading metadata is prohibited.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>11. Duplicate Content</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">You must not repeatedly upload the same recording under different artist names, titles, ISRCs, or metadata in an attempt to manipulate Digital Service Providers or royalty systems.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>12. Artificial Streaming &amp; Fraud</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">You must not engage in:</p>
+
+
+
+<ul class="wp-block-list">
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">artificial streaming;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">bot-generated plays;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">fake playlist placements;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">click farms;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">fake followers;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">manipulated engagement;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">fraudulent advertising; or</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">any activity intended to manipulate royalties or platform algorithms.</li>
+</ul>
+
+
+
+<h3 class="wp-block-heading"><strong>13. Right to Review</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">Nexus Tune may review any submitted recording before or after distribution.</p>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">Review does not constitute legal verification of ownership.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>14. Right to Reject or Remove</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">Nexus Tune reserves the right, at its sole discretion, to:</p>
+
+
+
+<ul class="wp-block-list">
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">reject any recording;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">suspend distribution;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">delay release;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">request additional documentation;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">remove content;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">correct technical issues where appropriate;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">refuse future submissions; or</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">terminate Services,</li>
+</ul>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">where reasonably necessary to comply with applicable law, DSP policies, or to protect Nexus Tune and its partners.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>15. Compliance Investigations</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">Nexus Tune may request:</p>
+
+
+
+<ul class="wp-block-list">
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">proof of ownership;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">copyright registrations;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">licenses;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">split sheets;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">publishing agreements;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">identity verification; or</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">any other documentation reasonably necessary to verify the legitimacy of submitted Content.</li>
+</ul>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">Failure to cooperate may result in suspension or removal of the affected Content.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>16. User Responsibility</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">The User remains solely responsible for:</p>
+
+
+
+<ul class="wp-block-list">
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">ownership of the recording;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">licensing;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">copyright compliance;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">metadata accuracy;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">ISRC accuracy;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">artwork compliance;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">publishing information; and</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">all legal consequences arising from the submitted Content.</li>
+</ul>
+
+
+
+<h3 class="wp-block-heading"><strong>17. No Guarantee of Distribution</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">Submission of audio does not guarantee:</p>
+
+
+
+<ul class="wp-block-list">
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">approval;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">distribution;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">monetization;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">playlist placement;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">royalty generation;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">Content ID eligibility;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">VEVO eligibility; or</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">acceptance by any Digital Service Provider.</li>
+</ul>
+
+
+
+<h3 class="wp-block-heading"><strong>18. Policy Updates</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">Nexus Tune may modify these Guidelines at any time to reflect changes in:</p>
+
+
+
+<ul class="wp-block-list">
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">applicable laws;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">DSP requirements;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">technology;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">security practices; or</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">business operations.</li>
+</ul>
+
+
+
+<p class="has-small-font-size wp-block-paragraph">The latest version shall apply upon publication.</p>
+
+
+
+<h3 class="wp-block-heading"><strong>19. Acceptance</strong></h3>
+
+
+
+<p class="has-small-font-size wp-block-paragraph" style="margin-top:5px;margin-bottom:5px">By uploading any audio recording through Nexus Tune, you acknowledge and agree that:</p>
+
+
+
+<ul class="wp-block-list">
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">you have read these Audio Content Guidelines;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">you understand your legal responsibilities;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">you agree to comply with all applicable Nexus Tune policies;</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">you accept that Nexus Tune may reject, suspend, or remove Content that does not comply with these Guidelines; and</li>
+
+
+
+<li class="has-small-font-size" style="margin-top:5px;margin-bottom:5px">you understand that violations may result in royalty withholding, administrative fees (where applicable), account suspension, or permanent termination of Services.</li>
+</ul>
+
+
+
+<p class="is-style-text-annotation is-style-text-annotation--1 wp-block-paragraph" style="font-size:12px"><strong>Last Updated:</strong> 29 June 2026</p>
+
+
+
+<p class="wp-block-paragraph"/>
+</div>
+	
+            </div>
+        </main>
+    </div>
+
+    <footer class="legal-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h4>Nexus Tune</h4>
+                <p>Global Music Distribution to 250+ Digital Platforms and Streaming Services in over 200 countries worldwide.</p>
+                <p style="margin-top:0.6rem;">Support: <a href="mailto:support@nexustune.com" style="color:var(--accent-green);text-decoration:none;">support@nexustune.com</a></p>
+            </div>
+            <div class="offices-grid">
+                <div class="office-card">
+                    <h5>Head Office</h5>
+                    <p>6 Bis Rue du Ranelagh, 45 Rue Cortambert, 6 Rue Beethoven, 75016 Paris, France</p>
+                </div>
+                <div class="office-card">
+                    <h5>Regional Office (India)</h5>
+                    <p>G Block, BKC, Bandra Kurla Complex, Bandra East, Mumbai, Maharashtra, India – 400098</p>
+                </div>
+                <div class="office-card">
+                    <h5>Regional Office (BD)</h5>
+                    <p>Road-11, Block-F, Banani, Dhaka, Bangladesh – 1213</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div>&copy; 2025 Nexus Tune. All rights reserved.</div>
+            <div>Official Legal & Compliance Documentation</div>
+        </div>
+    </footer>
+
+    <script>
+    function toggleMobileMenu() {
+        var sidebar = document.getElementById('legalSidebar');
+        var icon = document.getElementById('menuIcon');
+        sidebar.classList.toggle('mobile-open');
+        if (sidebar.classList.contains('mobile-open')) {
+            icon.innerText = '✕';
+        } else {
+            icon.innerText = '☰';
+        }
+    }
+    </script>
+
+</body>
+</html>

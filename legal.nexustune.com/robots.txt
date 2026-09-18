@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /arh-music-*
+
+Sitemap: https://legal.nexustune.com/sitemap.xml

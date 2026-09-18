@@ -1,0 +1,13 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+*.tmp
+
+# IDE / Editor Files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Local test & scratch logs
+portal.nexustune.com/data/mail_log.txt

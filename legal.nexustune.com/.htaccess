@@ -1,0 +1,44 @@
+# Nexus Tune - Legal Center Apache Configuration
+Options -Indexes
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Block Sensitive Files
+<FilesMatch "(?i)\.(sqlite|db|log|env|git|sql|bak|md|json|lock)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Deny,Allow
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# URL Rewriting & Legacy Redirects
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Redirect legacy ARH Music URLs to canonical Nexus Tune URLs
+    RewriteRule ^arh-music-disclaimer/?(.*)$ nexus-tune-disclaimer/$1 [R=301,L,NC]
+    RewriteRule ^arh-music-audio-content-guidelines/?(.*)$ nexus-tune-audio-content-guidelines/$1 [R=301,L,NC]
+
+    # Prevent loop for directories
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+
+    # Rewrite extensionless to .php if exists
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^([^\.]+)$ $1.php [NC,L,QSA]
+
+    # Rewrite extensionless to .html if exists
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.html -f
+    RewriteRule ^([^\.]+)$ $1.html [NC,L,QSA]
+</IfModule>

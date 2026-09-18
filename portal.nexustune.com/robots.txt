@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /login
+Allow: /signup
+Allow: /forgot-password
+Allow: /reset-password
+Disallow: /dashboard
+Disallow: /releases
+Disallow: /release-view
+Disallow: /create-release
+Disallow: /royalties
+Disallow: /settings
+Disallow: /support
+Disallow: /tools
+Disallow: /admin
+Disallow: /admin-*
+Disallow: /data/
+Disallow: /config/
+Disallow: /uploads/
+Disallow: /api/
+
+Sitemap: https://nexustune.com/sitemap.xml
