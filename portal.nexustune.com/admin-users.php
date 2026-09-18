@@ -30,6 +30,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $upd = $pdo->prepare("UPDATE users SET role = ? WHERE id = ?");
                 $upd->execute([$new_r, $target_id]);
                 $success = "User role updated to $new_r.";
+            } elseif ($action === 'delete_user') {
+                // Permanently delete user and clean up dependent data
+                $pdo->beginTransaction();
+                try {
+                    // 1. Delete ticket messages
+                    $stmt_tm = $pdo->prepare("DELETE FROM ticket_messages WHERE user_id = ? OR ticket_id IN (SELECT id FROM tickets WHERE user_id = ?)");
+                    $stmt_tm->execute([$target_id, $target_id]);
+
+                    // 2. Delete tickets
+                    $stmt_t = $pdo->prepare("DELETE FROM tickets WHERE user_id = ?");
+                    $stmt_t->execute([$target_id]);
+
+                    // 3. Delete payouts
+                    $stmt_p = $pdo->prepare("DELETE FROM payouts WHERE user_id = ?");
+                    $stmt_p->execute([$target_id]);
+
+                    // 4. Delete royalties
+                    $stmt_roy = $pdo->prepare("DELETE FROM royalties WHERE user_id = ?");
+                    $stmt_roy->execute([$target_id]);
+
+                    // 5. Delete releases
+                    $stmt_rel = $pdo->prepare("DELETE FROM releases WHERE user_id = ?");
+                    $stmt_rel->execute([$target_id]);
+
+                    // 6. Delete user
+                    $stmt_u = $pdo->prepare("DELETE FROM users WHERE id = ?");
+                    $stmt_u->execute([$target_id]);
+
+                    $pdo->commit();
+                    $success = "User #$target_id and all associated releases, royalties, and tickets were permanently deleted.";
+                } catch (Exception $e) {
+                    $pdo->rollBack();
+                    $error = "Failed to delete user: " . $e->getMessage();
+                }
             }
         }
     }
@@ -121,6 +155,15 @@ require_once __DIR__ . '/includes/sidebar.php';
                                             <input type="hidden" name="action" value="toggle_role">
                                             <button type="submit" class="btn btn-secondary btn-sm" title="Toggle Admin / Artist Role">
                                                 <i class="fa-solid fa-shield"></i>
+                                            </button>
+                                        </form>
+
+                                        <form method="POST" action="admin-users" style="display: inline-block;" onsubmit="return confirm('Are you sure you want to PERMANENTLY delete user \'<?= htmlspecialchars(addslashes($u['name']), ENT_QUOTES) ?>\' (<?= htmlspecialchars(addslashes($u['email']), ENT_QUOTES) ?>)?\n\nAll releases, royalties, and support tickets for this user will be removed permanently. This action cannot be undone.');">
+                                            <?= csrfInput() ?>
+                                            <input type="hidden" name="user_id" value="<?= $u['id'] ?>">
+                                            <input type="hidden" name="action" value="delete_user">
+                                            <button type="submit" class="btn btn-secondary btn-sm" title="Permanently Delete User" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.25);">
+                                                <i class="fa-solid fa-trash-can"></i>
                                             </button>
                                         </form>
                                     <?php else: ?>

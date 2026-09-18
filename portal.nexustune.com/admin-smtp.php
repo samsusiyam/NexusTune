@@ -119,7 +119,71 @@ require_once __DIR__ . '/includes/sidebar.php';
             </div>
         <?php endif; ?>
 
-        <div class="grid-2col" style="grid-template-columns: 1.3fr 1fr; align-items: start; gap: 24px;">
+<style>
+.smtp-grid-container {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    align-items: start;
+    gap: 24px;
+    width: 100%;
+}
+.smtp-presets-bar {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.smtp-presets-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-right: 4px;
+}
+.smtp-log-terminal {
+    background: #05070a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-sm);
+    padding: 12px;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 11.5px;
+    color: #a1a1aa;
+    max-height: 240px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    word-break: break-word;
+    line-height: 1.6;
+}
+.smtp-toggle-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+@media (max-width: 992px) {
+    .smtp-grid-container {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+}
+@media (max-width: 576px) {
+    .smtp-presets-bar {
+        gap: 6px;
+    }
+    .smtp-presets-bar .btn {
+        padding: 6px 10px;
+        font-size: 11.5px;
+    }
+    .smtp-toggle-card {
+        padding: 12px;
+    }
+}
+</style>
+
+        <div class="smtp-grid-container">
             <!-- Left Column: SMTP Server Configuration Form -->
             <div class="glass-card">
                 <div class="card-header">
@@ -128,8 +192,8 @@ require_once __DIR__ . '/includes/sidebar.php';
                     </div>
                 </div>
 
-                <div style="margin-bottom: 20px; display: flex; gap: 8px; flex-wrap: wrap;">
-                    <span style="font-size: 12px; color: var(--text-dim); align-self: center; margin-right: 4px;">Quick Presets:</span>
+                <div class="smtp-presets-bar">
+                    <span class="smtp-presets-label">Quick Presets:</span>
                     <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('gmail')"><i class="fa-brands fa-google"></i> Gmail</button>
                     <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('zoho')"><i class="fa-solid fa-envelope"></i> Zoho</button>
                     <button type="button" class="btn btn-secondary btn-sm" onclick="setPreset('sendgrid')"><i class="fa-solid fa-paper-plane"></i> SendGrid</button>
@@ -140,11 +204,11 @@ require_once __DIR__ . '/includes/sidebar.php';
                     <?= csrfInput() ?>
                     <input type="hidden" name="action_save_smtp" value="1">
 
-                    <div class="form-group" style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; background: rgba(255,255,255,0.03); padding: 14px 18px; border-radius: var(--radius-md); border: 1px solid rgba(255,255,255,0.06);">
-                        <input type="checkbox" name="smtp_enabled" id="smtp_enabled" <?= $smtp_enabled ? 'checked' : '' ?> style="width: 20px; height: 20px; accent-color: var(--color-primary); cursor: pointer;">
-                        <label for="smtp_enabled" style="font-size: 14px; font-weight: 600; color: #fff; cursor: pointer;">
+                    <div class="form-group smtp-toggle-card">
+                        <input type="checkbox" name="smtp_enabled" id="smtp_enabled" <?= $smtp_enabled ? 'checked' : '' ?> style="width: 20px; height: 20px; accent-color: var(--color-primary); cursor: pointer; margin-top: 2px; flex-shrink: 0;">
+                        <label for="smtp_enabled" style="font-size: 13.5px; font-weight: 600; color: #fff; cursor: pointer; flex: 1;">
                             Enable Live SMTP Email Dispatch
-                            <div style="font-size: 12px; color: var(--text-dim); font-weight: 400; margin-top: 2px;">
+                            <div style="font-size: 12px; color: var(--text-dim); font-weight: 400; margin-top: 2px; line-height: 1.4;">
                                 When enabled, activation links and password resets are sent directly via the SMTP server below.
                             </div>
                         </label>
@@ -211,7 +275,7 @@ require_once __DIR__ . '/includes/sidebar.php';
                     </div>
 
                     <div style="margin-top: 24px;">
-                        <button type="submit" class="btn btn-primary" style="padding: 12px 28px;">
+                        <button type="submit" class="btn btn-primary" style="padding: 12px 28px; width: auto;">
                             <i class="fa-solid fa-floppy-disk"></i> Save SMTP Settings
                         </button>
                     </div>
@@ -219,7 +283,7 @@ require_once __DIR__ . '/includes/sidebar.php';
             </div>
 
             <!-- Right Column: Live Testing & Real-Time Connection Diagnostic -->
-            <div style="display: flex; flex-direction: column; gap: 24px;">
+            <div style="display: flex; flex-direction: column; gap: 24px; min-width: 0;">
                 <!-- Test Email Form -->
                 <div class="glass-card">
                     <div class="card-header">
@@ -251,7 +315,7 @@ require_once __DIR__ . '/includes/sidebar.php';
                             <div style="font-size: 12.5px; font-weight: 700; color: #fff; margin-bottom: 8px;">
                                 Diagnostic Handshake Log:
                             </div>
-                            <div style="background: #05070a; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 11.5px; color: #a1a1aa; max-height: 220px; overflow-y: auto; line-height: 1.6;">
+                            <div class="smtp-log-terminal">
                                 <?php foreach ($test_output['logs'] as $log_line): ?>
                                     <div style="<?= strpos($log_line, '✅') !== false ? 'color: #57ff52;' : (strpos($log_line, '❌') !== false ? 'color: #ef4444;' : '') ?>">
                                         <?= htmlspecialchars($log_line) ?>
@@ -269,7 +333,7 @@ require_once __DIR__ . '/includes/sidebar.php';
                             <i class="fa-solid fa-clipboard-list" style="color: var(--color-primary);"></i> System Mail Activity Log
                         </div>
                     </div>
-                    <div style="background: #05070a; border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; font-family: monospace; font-size: 11px; color: #a1a1aa; max-height: 220px; overflow-y: auto; white-space: pre-wrap; line-height: 1.5;">
+                    <div class="smtp-log-terminal">
                         <?= htmlspecialchars($recent_logs ?: 'No outgoing mail activity logged yet.') ?>
                     </div>
                 </div>
